@@ -4,17 +4,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web_K8S.Controllers
+namespace Temp.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class TempController : ControllerBase
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return new JsonResult(new {
+                Mac="AD-EF-23-45-23",
+                SSID="kxc",
+                Temp =10,
+                Charge = true,
+                Battery = 1.5,
+                WiFi=-40,
+            });
         }
 
         // GET api/values/5
