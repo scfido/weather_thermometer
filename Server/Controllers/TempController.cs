@@ -8,20 +8,34 @@ namespace Temp.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TempController : ControllerBase
+    public class DeviceController : ControllerBase
     {
+        readonly IDeviceRepository db;
+        public DeviceController(IDeviceRepository db)
+        {
+            this.db = db;
+        }
+
         // GET api/values
         [HttpGet]
-        public ActionResult Get()
+        public ActionResult<IList<TempDevice>> Get()
         {
-            return new JsonResult(new {
-                Mac="AD-EF-23-45-23",
-                SSID="kxc",
-                Temp =10,
-                Charge = true,
-                Battery = 1.5,
-                WiFi=-40,
-            });
+            return Ok(db.GetDevices());
+
+            //var devices = new TempDevice[] {
+            //    new TempDevice
+            //    {
+            //        MAC="AD-EF-23-45-23",
+            //        SSID="kxc",
+            //        Temp =10.1,
+            //        Power = true,
+            //        Charge = true,
+            //        Battery = 1.5,
+            //        WiFiStrength=-40,
+            //    }
+            //};
+
+            //return devices;
         }
 
         // GET api/values/5
