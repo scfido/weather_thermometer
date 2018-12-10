@@ -25,12 +25,16 @@ namespace Temp.Server
                 .AddUserSecrets<Program>()
                 .Build();
 
+            var certPath = Path.Join(Directory.GetCurrentDirectory(), "https.pfx");
+            if (!File.Exists(certPath))
+                throw new FileNotFoundException($"没有找到https证书 {certPath}");
+
             return WebHost.CreateDefaultBuilder(args)
               .UseKestrel(options =>
               {
                   options.Listen(IPAddress.Any, 443, listOptions =>
                   {
-                      listOptions.UseHttps("./https.pfx", config["HttpsCertPassword"]);
+                      listOptions.UseHttps(certPath, config["HttpsCertPassword"]);
                   });
               })
               .UseStartup<Startup>();
