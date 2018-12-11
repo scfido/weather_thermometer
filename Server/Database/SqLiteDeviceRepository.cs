@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,11 +11,26 @@ namespace Temp.Server
 {
     public class SqLiteDeviceRepository : SqLiteBaseRepository, IDeviceRepository
     {
-        public SqLiteDeviceRepository(IConfiguration config)
+        private readonly ILogger logger;
+
+        public SqLiteDeviceRepository(IConfiguration config, ILogger<SqLiteDeviceRepository> logger)
             : base(config)
         {
+            this.logger = logger;
+
             if (!File.Exists(DbFile))
-                CreateDatabase();
+            {
+                logger.LogWarning($"数据库\"{DbFile}\"不存在将创建。");
+                try
+                {
+                    CreateDatabase();
+                    logger.LogInformation($"数据库创建成功。");
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, $"数据库创建失败。");
+                }
+            }
         }
 
         public IList<TempDevice> GetDevices()
@@ -32,9 +48,6 @@ namespace Temp.Server
 
         public TempDevice GetDevice(int id)
         {
-            if (!File.Exists(DbFile))
-                return null;
-
             using (var cnn = SimpleDbConnection())
             {
                 cnn.Open();
@@ -48,28 +61,30 @@ namespace Temp.Server
 
         public void SaveDevice(TempDevice device)
         {
-            if (!File.Exists(DbFile))
-            {
-                CreateDatabase();
-            }
-
             using (var cnn = SimpleDbConnection())
             {
                 cnn.Open();
                 device.Id = cnn.Query<int>(
                     @"INSERT INTO Device 
-                    (SSID, WiFiStrength, MAC,Temp,Power,Charge,Battery ) VALUES 
+                    (SSID, WiFiStrength, MAC,Temp,Power,Charge,Battery ) 
+                    VALUES 
                     ( @SSID, @WiFiStrength, @MAC, @Temp, @Power, @Charge, @Battery );
-                    select last_insert_rowid()", device).First();
+                    select last_insert_rowid()", device)
+                    .First();
             }
         }
 
-        private static void CreateDatabase()
+        private void CreateDatabase()
         {
-            using (var cnn = SimpleDbConnection())
+            //创建数据库文件夹
+            var dbDir = Path.GetDirectoryName(DbFile);
+            if (!Directory.Exists(dbDir))
+                Directory.CreateDirectory(dbDir);
+
+            using (var db = SimpleDbConnection())
             {
-                cnn.Open();
-                cnn.Execute(
+                db.Open();
+                db.Execute(
                     @"create table Device
                       (
                         ID                  integer primary key AUTOINCREMENT,

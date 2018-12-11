@@ -30,14 +30,14 @@ namespace Temp.Server
                 throw new FileNotFoundException($"没有找到https证书 {certPath}");
 
             return WebHost.CreateDefaultBuilder(args)
-              .UseKestrel(options =>
-              {
-                  options.Listen(IPAddress.Any, 443, listOptions =>
-                  {
-                      listOptions.UseHttps(certPath, config["HttpsCertPassword"]);
-                  });
-              })
-              .UseStartup<Startup>();
+                .UseKestrel(options =>
+                {
+                    options.Listen(IPAddress.Any, 443, listOptions =>
+                    {
+                        listOptions.UseHttps(certPath, config["HttpsCertPassword"]);
+                    });
+                })
+                .UseStartup<Startup>();
         }
     }
 }

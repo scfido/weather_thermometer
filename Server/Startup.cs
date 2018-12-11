@@ -25,6 +25,13 @@ namespace Temp.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddLogging(builder =>
+            //{
+            //    builder
+            //        .AddConfiguration(Configuration.GetSection("Logging"))
+            //        .AddConsole();
+            //});
+
             services.AddTransient<IDeviceRepository, SqLiteDeviceRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
