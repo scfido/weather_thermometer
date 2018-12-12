@@ -4,23 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Temp.Server.Controllers
+namespace WeatherStation.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class DeviceController : ControllerBase
     {
-        readonly IDeviceRepository db;
-        public DeviceController(IDeviceRepository db)
+        readonly IDbRepository db;
+        public DeviceController(IDbRepository db)
         {
             this.db = db;
         }
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IList<TempDevice>> Get()
+        public ActionResult<IList<Thermometer>> Get()
         {
-            return Ok(db.GetDevices());
+            return Ok(db.GetThermometers());
 
             //var devices = new TempDevice[] {
             //    new TempDevice

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Temp.Server
+namespace WeatherStation.Server
 {
     public class SqLiteBaseRepository
     {

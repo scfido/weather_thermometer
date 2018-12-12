@@ -4,7 +4,8 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <UserSecretsId>0b73f8dc-1920-45c7-b573-e9e5386c92ef</UserSecretsId>
-    <RootNamespace>Temp.Server</RootNamespace>
+    <RootNamespace>WeatherStation.Server</RootNamespace>
+    <AssemblyName>WeatherStation.Server</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

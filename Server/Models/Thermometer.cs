@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Temp.Server
+namespace WeatherStation.Server
 {
     /// <summary>
     /// 温度测量设备
     /// </summary>
-    public class TempDevice
+    public class Thermometer
     {
         /// <summary>
         /// 数据库ID。
@@ -49,5 +49,21 @@ namespace Temp.Server
         /// 电池电压
         /// </summary>
         public double Battery { get; set; }
-}
+
+        /// <summary>
+        /// 最后更新日期
+        /// </summary>
+        public DateTime LastUpdate { get; set; }
+
+        /// <summary>
+        /// 设备IP地址。
+        /// </summary>
+        public string IPAddress { get; set; }
+
+        /// <summary>
+        /// 固件版本
+        /// </summary>
+        public string Firmware { get; set; }
+
+    }
 }

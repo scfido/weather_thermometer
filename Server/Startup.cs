@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Temp.Server
+namespace WeatherStation.Server
 {
     public class Startup
     {
@@ -25,14 +25,7 @@ namespace Temp.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddLogging(builder =>
-            //{
-            //    builder
-            //        .AddConfiguration(Configuration.GetSection("Logging"))
-            //        .AddConsole();
-            //});
-
-            services.AddTransient<IDeviceRepository, SqLiteDeviceRepository>();
+            services.AddTransient<IDbRepository, SqLiteDbRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
