@@ -42,7 +42,7 @@ namespace WeatherStation.Server
                     @"SELECT Id, SSID, WiFiStrength, MAC, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
                     FROM Thermometer
                     WHERE OpenId = @openId
-                    ", openId).ToList();
+                    ", new { openId }).ToList();
 
                 return result;
             }

@@ -10,6 +10,11 @@ namespace WeatherStation.Server
     /// </summary>
     public class Thermometer
     {
+        public Thermometer()
+        {
+
+        }
+
         public Thermometer(string openId, string mac)
         {
             OpenId = openId ?? throw new ArgumentNullException(nameof(openId));
