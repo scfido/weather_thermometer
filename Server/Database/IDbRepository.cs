@@ -7,14 +7,16 @@ namespace WeatherStation.Server
 {
     public interface IDbRepository
     {
-        IList<Thermometer> GetThermometers();
+        IList<Thermometer> GetThermometers(string openId);
 
-        Thermometer GetThermometer(int id);
+        Thermometer GetThermometer(string openId, int id);
 
-        void InsertThermometer(Thermometer device);
+        int AddThermometer(string openId, string mac);
+
+        void RemoveThermometer(string openId, int id);
 
         void SaveThermometerStatus(Thermometer device);
 
-        void GetTemparetureHistory(string mac, DateTime start, DateTime end);
+        IList<TemparetureHistoryData> GetTemparetureHistory(string openId, int id, DateTime start, DateTime end);
     }
 }

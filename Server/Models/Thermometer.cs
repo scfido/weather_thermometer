@@ -10,6 +10,12 @@ namespace WeatherStation.Server
     /// </summary>
     public class Thermometer
     {
+        public Thermometer(string openId, string mac)
+        {
+            OpenId = openId ?? throw new ArgumentNullException(nameof(openId));
+            MAC = mac ?? throw new ArgumentNullException(nameof(mac));
+        }
+
         /// <summary>
         /// 数据库ID。
         /// </summary>
@@ -52,8 +58,9 @@ namespace WeatherStation.Server
 
         /// <summary>
         /// 最后更新日期
+        /// Null表示新添设备，还没有任何数据
         /// </summary>
-        public DateTime LastUpdate { get; set; }
+        public DateTime? LastUpdate { get; set; }
 
         /// <summary>
         /// 设备IP地址。
@@ -65,5 +72,9 @@ namespace WeatherStation.Server
         /// </summary>
         public string Firmware { get; set; }
 
+        /// <summary>
+        /// 温度计所属用户的OpenId
+        /// </summary>
+        public string OpenId { get;  set; }
     }
 }

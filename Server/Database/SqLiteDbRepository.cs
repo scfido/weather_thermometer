@@ -33,44 +33,63 @@ namespace WeatherStation.Server
             }
         }
 
-        public IList<Thermometer> GetThermometers()
+        public IList<Thermometer> GetThermometers(string openId)
         {
             using (var cnn = SimpleDbConnection())
             {
                 cnn.Open();
                 var result = cnn.Query<Thermometer>(
-                    @"SELECT Id, SSID, WiFiStrength, MAC, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware
-                    FROM Thermometer").ToList();
-
-                return result;
-            }
-        }
-
-        public Thermometer GetThermometer(int id)
-        {
-            using (var cnn = SimpleDbConnection())
-            {
-                cnn.Open();
-                var result = cnn.Query<Thermometer>(
-                    @"SELECT Id, SSID, WiFiStrength, MAC, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware
+                    @"SELECT Id, SSID, WiFiStrength, MAC, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
                     FROM Thermometer
-                    WHERE Id = @id", new { id }).FirstOrDefault();
+                    WHERE OpenId = @openId
+                    ", openId).ToList();
+
                 return result;
             }
         }
 
-        public void InsertThermometer(Thermometer device)
+        public Thermometer GetThermometer(string openId, int id)
         {
+            using (var cnn = SimpleDbConnection())
+            {
+                cnn.Open();
+                var result = cnn.Query<Thermometer>(
+                    @"SELECT Id, SSID, WiFiStrength, MAC, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
+                    FROM Thermometer
+                    WHERE
+                        OpenId = @openId AND Id = @id"
+                    , new { openId, id }).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public int AddThermometer(string openId, string mac)
+        {
+            Thermometer device = new Thermometer(openId, mac);
             using (var cnn = SimpleDbConnection())
             {
                 cnn.Open();
                 device.Id = cnn.Query<int>(
                     @"INSERT INTO Thermometer 
-                    (SSID, WiFiStrength, MAC, Temp, Power, Charge, Battery, IPAddress, Firmware) 
+                        (MAC, OpenId) 
                     VALUES 
-                    ( @SSID, @WiFiStrength, @MAC, @Temp, @Power, @Charge, @Battery, @IPAddress, @Firmware );
+                        (  @MAC, @OpenId );
                     select last_insert_rowid()", device)
                     .First();
+            }
+
+            return device.Id;
+        }
+
+        public void RemoveThermometer(string openId, int id)
+        {
+            using (var cnn = SimpleDbConnection())
+            {
+                cnn.Open();
+                var trans = cnn.BeginTransaction();
+                cnn.Execute(@"DELETE TemperatureHistory WHERE ThermometerID=@id", new { openId, id });
+                cnn.Execute(@"DELETE Thermometer WHERE OpenID=@openId AND ID=@id", new { openId, id });
+                trans.Commit();
             }
         }
 
@@ -81,7 +100,7 @@ namespace WeatherStation.Server
                 cnn.Open();
 
                 bool exist = cnn.Query<int>(
-                    @"SELECT count(*) FROM Thermometer WHERE MAC=@MAC",
+                    @"SELECT count(*) FROM Thermometer WHERE OpenID=@openId AND MAC=@MAC",
                     device
                 )
                 .Single() > 0;
@@ -106,24 +125,45 @@ namespace WeatherStation.Server
                         Battery=@Battery,
                         IPAddress=@IPAddress 
                     WHERE
+                         OpenID=@openId AND
                         MAC=@MAC;"
                     , device);
 
                 //添加温度历史
                 cnn.Execute(
                     @"INSERT INTO TemperatureHistory 
-                        (MAC, Temp, Battery) 
+                        (ThermometerID, MAC, Temp, Battery, IPAddress) 
                     VALUES 
-                        ( @MAC, @Temp, @Battery);"
+                        (@ID, @MAC, @Temp, @Battery, @IPAddress);"
                     , device);
 
                 trans.Commit();
             }
         }
 
-        public void GetTemparetureHistory(string mac, DateTime start, DateTime end)
+        /// <summary>
+        /// 获取温度计历史数据
+        /// </summary>
+        /// <param name="id">温度计ID</param>
+        /// <param name="start">历史数据开始日期</param>
+        /// <param name="end">历史数据结束日期</param>
+        public IList<TemparetureHistoryData> GetTemparetureHistory(string openId, int id, DateTime start, DateTime end)
         {
-            throw new NotImplementedException();
+            using (var cnn = SimpleDbConnection())
+            {
+                cnn.Open();
+                var result = cnn.Query<TemparetureHistoryData>(
+                    @"SELECT Time, WiFiStrength, Temp, Battery
+                    FROM TemperatureHistory
+                    WHERE
+                        OpenId = @openId AND
+                        Id = @id AND
+                        Time >= @Start AND
+                        Time <= end
+                    "
+                    , new { openId, id }).ToList();
+                return result;
+            }
         }
 
         private void CreateDatabase()
@@ -139,26 +179,27 @@ namespace WeatherStation.Server
                 db.Execute(@"
                     CREATE TABLE Thermometer (
 	                    ID integer PRIMARY KEY AUTOINCREMENT,
-	                    SSID varchar ( 100 ) NOT NULL,
+	                    SSID varchar ( 100 ),
 	                    WiFiStrength INTEGER,
 	                    MAC varchar ( 100 ) NOT NULL,
-	                    TEMP REAL,
+	                    Temp REAL,
 	                    Power INTEGER,
 	                    Charge INTEGER,
 	                    Battery REAL,
-	                    IPAddress varchar ( 100 ) NOT NULL,
-	                    Firmware varchar ( 100 ) NOT NULL,
+	                    IPAddress varchar ( 20 ),
+	                    Firmware varchar ( 100 ),
 	                    CreatedDate datetime DEFAULT (
 	                    datetime( 'now', 'localtime' )),
-	                    LastUpdate datetime DEFAULT (
-	                    datetime( 'now', 'localtime' )) 
+	                    LastUpdate datetime,
+	                    OpenId varchar ( 100 ) NOT NULL 
                     );
 
                     CREATE TABLE TemperatureHistory (
 	                    ID integer PRIMARY KEY AUTOINCREMENT,
-	                    MAC varchar ( 100 ) NOT NULL,
-	                    TEMP REAL,
+                        ThermometerID integer,
+	                    Temp REAL,
 	                    Battery REAL,
+	                    IPAddress varchar ( 20 ),
 	                    CreatedDate datetime DEFAULT (
 	                    datetime( 'now', 'localtime' )) 
                     );
