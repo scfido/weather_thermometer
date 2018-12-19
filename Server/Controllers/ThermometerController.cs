@@ -29,36 +29,38 @@ namespace WeatherStation.Server.Controllers
         }
 
         // 添加指定人员的温度计
-        [HttpPost("devices/{openid}")]
-        public ActionResult<int> Post(string openId, string mac)
+        [HttpPost("{openid}/{mac}")]
+        public ActionResult<Thermometer> Post(string openId, string mac, [FromBody]Thermometer device)
         {
-            return db.AddThermometer(openId, mac);
+            return db.AddThermometer(openId, mac, device.Name);
         }
 
         // 更新温度数据和设备状态
         // Get http://hostname/api/thermometer/update?ver=1.0&sn=123456AB&ssid=wifi&key=34235&batt=3.6&rssi=5334&power=3&temp=11.5&charge=0;
         // GET api/values/5
         [HttpGet("update")]
-        public ActionResult Update(Thermometer info)
+        public ActionResult<Thermometer> Update([FromBody]Thermometer device)
         {
-            return Ok();
+            return NoContent();
         }
 
 
         // 修改指定人员的温度计名称
         // PUT api/thermometer/openid/mac
-        [HttpPost("devices/{openid}")]
-        public ActionResult Put(string openId, string mac, string name)
+        [HttpPut("{openid}/{id}")]
+        public ActionResult<Thermometer> Put(string openId, int id, [FromBody]Thermometer device)
         {
-            return Ok();
+           return db.UpdateThermometer(openId, id, device.Name);
         }
 
 
         // 删除指定人员的温度计
         // DELETE api/thermometer/openid/mac
-        [HttpDelete("{openid}/{mac}")]
-        public void Delete(string openId, string mac)
+        [HttpDelete("{openid}/{id}")]
+        public ActionResult Delete(string openId, int id)
         {
+            db.RemoveThermometer(openId, id);
+            return NoContent();
         }
     }
 }

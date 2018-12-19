@@ -39,7 +39,7 @@ namespace WeatherStation.Server
             {
                 cnn.Open();
                 var result = cnn.Query<Thermometer>(
-                    @"SELECT Id, SSID, WiFiStrength, MAC, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
+                    @"SELECT Id, SSID, Name, WiFiStrength, MAC, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
                     FROM Thermometer
                     WHERE OpenId = @openId
                     ", new { openId }).ToList();
@@ -54,7 +54,7 @@ namespace WeatherStation.Server
             {
                 cnn.Open();
                 var result = cnn.Query<Thermometer>(
-                    @"SELECT Id, SSID, WiFiStrength, MAC, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
+                    @"SELECT Id, SSID, Name, WiFiStrength, MAC, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
                     FROM Thermometer
                     WHERE
                         OpenId = @openId AND Id = @id"
@@ -63,22 +63,45 @@ namespace WeatherStation.Server
             }
         }
 
-        public int AddThermometer(string openId, string mac)
+        public Thermometer UpdateThermometer(string openId, int id, string name)
         {
-            Thermometer device = new Thermometer(openId, mac);
+            using (var cnn = SimpleDbConnection())
+            {
+                cnn.Open();
+                var result = cnn.Query<Thermometer>(
+                    @"
+                    UPDATE Thermometer
+                    SET
+                        Name = @name
+                    WHERE
+                         OpenID = @openId AND
+                         Id = @id;
+
+                    SELECT Id, Name, SSID, WiFiStrength, MAC, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
+                    FROM Thermometer
+                    WHERE
+                        OpenId = @openId AND Id = @id"
+                    , new { openId, id, name }).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public Thermometer AddThermometer(string openId, string mac, string name)
+        {
+            Thermometer device = new Thermometer(openId, mac, name);
             using (var cnn = SimpleDbConnection())
             {
                 cnn.Open();
                 device.Id = cnn.Query<int>(
                     @"INSERT INTO Thermometer 
-                        (MAC, OpenId) 
+                        (MAC, OpenId, Name) 
                     VALUES 
-                        (  @MAC, @OpenId );
+                        (  @MAC, @OpenId ,@name);
                     select last_insert_rowid()", device)
                     .First();
             }
 
-            return device.Id;
+            return device;
         }
 
         public void RemoveThermometer(string openId, int id)
@@ -87,8 +110,9 @@ namespace WeatherStation.Server
             {
                 cnn.Open();
                 var trans = cnn.BeginTransaction();
-                cnn.Execute(@"DELETE TemperatureHistory WHERE ThermometerID=@id", new { openId, id });
-                cnn.Execute(@"DELETE Thermometer WHERE OpenID=@openId AND ID=@id", new { openId, id });
+                int rows = cnn.Execute(@"DELETE FROM Thermometer WHERE OpenID=@openId AND ID=@id", new { openId, id });
+                if(rows > 0)
+                    cnn.Execute(@"DELETE FROM TemperatureHistory WHERE ThermometerID=@id", new { openId, id });
                 trans.Commit();
             }
         }
@@ -182,6 +206,7 @@ namespace WeatherStation.Server
 	                    SSID varchar ( 100 ),
 	                    WiFiStrength INTEGER,
 	                    MAC varchar ( 100 ) NOT NULL,
+	                    Name varchar ( 100 ) NOT NULL,
 	                    Temp REAL,
 	                    Power INTEGER,
 	                    Charge INTEGER,

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,19 +13,24 @@ namespace WeatherStation.Server
     {
         public Thermometer()
         {
-
         }
 
-        public Thermometer(string openId, string mac)
+        public Thermometer(string openId, string mac, string name)
         {
             OpenId = openId ?? throw new ArgumentNullException(nameof(openId));
             MAC = mac ?? throw new ArgumentNullException(nameof(mac));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         /// <summary>
         /// 数据库ID。
         /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// 温度计的名称
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// 设备连接Wifi SSID名称
@@ -80,6 +86,6 @@ namespace WeatherStation.Server
         /// <summary>
         /// 温度计所属用户的OpenId
         /// </summary>
-        public string OpenId { get;  set; }
+        public string OpenId { get; set; }
     }
 }

@@ -11,7 +11,9 @@ namespace WeatherStation.Server
 
         Thermometer GetThermometer(string openId, int id);
 
-        int AddThermometer(string openId, string mac);
+        Thermometer UpdateThermometer(string openId, int id, string name);
+
+        Thermometer AddThermometer(string openId, string mac, string name);
 
         void RemoveThermometer(string openId, int id);
 
