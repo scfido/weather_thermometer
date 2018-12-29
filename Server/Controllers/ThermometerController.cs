@@ -23,32 +23,31 @@ namespace WeatherStation.Server.Controllers
         // 获取指定人员的温度计信息
         // GET api/thermometer/openid
         [HttpGet("{openId}")]
-        public ActionResult<IList<Thermometer>> Get(string openId)
+        public async  Task<IList<Thermometer>> Get(string openId)
         {
-            return Ok(db.GetThermometers(openId));
+            return db.GetThermometers(openId);
         }
 
         // 添加指定人员的温度计
         [HttpPost("{openid}/{mac}")]
-        public ActionResult<Thermometer> Post(string openId, string mac, [FromBody]Thermometer device)
+        public async Task<Thermometer> Post(string openId, string mac, [FromBody]Thermometer device)
         {
             return db.AddThermometer(openId, mac, device.Name);
         }
 
         // 更新温度数据和设备状态
-        // Get http://hostname/api/thermometer/update?ver=1.0&sn=123456AB&ssid=wifi&key=34235&batt=3.6&rssi=5334&power=3&temp=11.5&charge=0;
-        // GET api/values/5
-        [HttpGet("update")]
-        public ActionResult<Thermometer> Update([FromBody]Thermometer device)
+        // Get http://hostname/api/thermometer/upload?ver=1.0&sn=123456AB&ssid=wifi&key=34235&batt=3.6&rssi=5334&power=3&temp=11.5&charge=0;
+        [HttpGet("upload")]
+        public async Task<Thermometer> Upload([FromBody]Thermometer device)
         {
-            return NoContent();
+            return null;
         }
 
 
         // 修改指定人员的温度计名称
         // PUT api/thermometer/openid/mac
         [HttpPut("{openid}/{id}")]
-        public ActionResult<Thermometer> Put(string openId, int id, [FromBody]Thermometer device)
+        public async Task<Thermometer> Put(string openId, int id, [FromBody]Thermometer device)
         {
            return db.UpdateThermometer(openId, id, device.Name);
         }
@@ -57,10 +56,9 @@ namespace WeatherStation.Server.Controllers
         // 删除指定人员的温度计
         // DELETE api/thermometer/openid/mac
         [HttpDelete("{openid}/{id}")]
-        public ActionResult Delete(string openId, int id)
+        public async void Delete(string openId, int id)
         {
             db.RemoveThermometer(openId, id);
-            return NoContent();
         }
     }
 }
