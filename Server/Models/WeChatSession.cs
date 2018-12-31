@@ -11,7 +11,7 @@ namespace WeatherStation.Server
         /// <summary>
         /// 用户唯一标识
         /// </summary>
-        public string Openid { get; set; }
+        public string OpenId { get; set; }
 
         /// <summary>
         /// 会话密钥

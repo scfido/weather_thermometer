@@ -15,10 +15,10 @@ namespace WeatherStation.Server
         {
         }
 
-        public Thermometer(string openId, string mac, string name)
+        public Thermometer(string openId, string sn, string name)
         {
             OpenId = openId ?? throw new ArgumentNullException(nameof(openId));
-            MAC = mac ?? throw new ArgumentNullException(nameof(mac));
+            Sn = sn ?? throw new ArgumentNullException(nameof(sn));
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
@@ -43,14 +43,19 @@ namespace WeatherStation.Server
         public int WiFiStrength { get; set; }
 
         /// <summary>
-        /// MAC地址
+        /// 设备序列号
         /// </summary>
-        public string MAC { get; set; }
+        public string Sn { get; set; }
+
+        /// <summary>
+        /// 设备温度探测器的序列号
+        /// </summary>
+        public string Key { get; set; }
 
         /// <summary>
         /// 设备测量温度，摄氏度。
         /// </summary>
-        public double Temp { get; set; }
+        public double Temperature { get; set; }
 
         /// <summary>
         /// 设备是否已连接外接电源
@@ -81,7 +86,7 @@ namespace WeatherStation.Server
         /// <summary>
         /// 固件版本
         /// </summary>
-        public string Firmware { get; set; }
+        public Version Firmware { get; set; }
 
         /// <summary>
         /// 温度计所属用户的OpenId

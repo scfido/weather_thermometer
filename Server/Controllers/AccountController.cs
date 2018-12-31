@@ -20,9 +20,13 @@ namespace Server.Controllers
         readonly IDbRepository db;
         readonly ILogger<AccountController> logger;
         readonly IConfiguration configuration;
-        HttpClient httpClient;
+        readonly HttpClient httpClient;
 
-        public AccountController(IDbRepository db, ILogger<AccountController> logger, IConfiguration configuration, HttpClient httpClient)
+        public AccountController(
+            IDbRepository db,
+            ILogger<AccountController> logger,
+            IConfiguration configuration,
+            HttpClient httpClient)
         {
             this.db = db;
             this.logger = logger;
@@ -31,18 +35,58 @@ namespace Server.Controllers
         }
 
         [HttpGet("login/{code}")]
-        public async Task<string> Login(string code)
+        public async Task<dynamic> Login(string code)
         {
             //GET https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
-            //Response 200OK {"session_key":"Pw2PbhyOuHiuz7W4QfimKw==","openid":"oxihd5c4EBDVEUNCLRJhvkS6l1Xg"}
+            //Response 200 OK: {"session_key":"Pw2PbhyOuHiuz7W4QfimKw==","openid":"oxihd5c4EBDVEUNCLRJhvkS6l1Xg"}
             httpClient.BaseAddress = new Uri("https://api.weixin.qq.com");
 
             var appId = configuration.GetValue<string>("WeChat:AppId");
             var secret = configuration.GetValue<string>("WeChat:AppSecret");
-            var ret = await httpClient.GetStringAsync($"/sns/jscode2session?appid={appId}&secret={secret}&js_code={code}&grant_type=authorization_code");
-            var session = JsonConvert.DeserializeObject<WeChatSession>(ret);
+            try
+            {
+                var ret = await httpClient.GetStringAsync($"/sns/jscode2session?appid={appId}&secret={secret}&js_code={code}&grant_type=authorization_code");
+                var weChatSession = JsonConvert.DeserializeObject<WeChatSession>(ret);
+                if (weChatSession.ErrorCode == 0)
+                {
+                    var newUser = false;
+                    var user = await db.GetUser(weChatSession.OpenId);
+                    if (user == null)
+                    {
+                        //新用户
+                        newUser = true;
+                        user = new User()
+                        {
+                            OpenId = weChatSession.OpenId,
+                        };
+                    }
 
-            return session.Openid;
+                    user.WeChatSessioKey = weChatSession.SessionKey;
+                    user.LastLogin = DateTime.Now;
+                    user.IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+                    user.Session = Guid.NewGuid().ToString();
+
+                    if (newUser)
+                        await db.AddUser(user);
+                    else
+                        await db.UpdateUser(user);
+
+                    //成功返回session
+                    return new { user.Session };
+                }
+                else
+                {
+                    logger.LogWarning("登陆失败，错误代码:" + weChatSession.ErrorCode);
+                    //失败返回null。
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "登陆出现异常。");
+                return null;
+            }
+
         }
     }
 }
