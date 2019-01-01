@@ -60,12 +60,12 @@ namespace WeatherStation.Server
         /// <summary>
         /// 设备是否已连接外接电源
         /// </summary>
-        public bool Power { get; set; }
+        public int Power { get; set; }
 
         /// <summary>
         /// 是否正在充电中
         /// </summary>
-        public bool Charge { get; set; }
+        public int Charge { get; set; }
 
         /// <summary>
         /// 电池电压
@@ -86,7 +86,7 @@ namespace WeatherStation.Server
         /// <summary>
         /// 固件版本
         /// </summary>
-        public Version Firmware { get; set; }
+        public string Firmware { get; set; }
 
         /// <summary>
         /// 温度计所属用户的OpenId

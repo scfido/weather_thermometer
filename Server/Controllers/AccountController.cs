@@ -50,7 +50,7 @@ namespace Server.Controllers
                 if (weChatSession.ErrorCode == 0)
                 {
                     var newUser = false;
-                    var user = await db.GetUser(weChatSession.OpenId);
+                    var user = await db.GetUserBySession(weChatSession.OpenId);
                     if (user == null)
                     {
                         //新用户

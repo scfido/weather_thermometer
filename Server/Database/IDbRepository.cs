@@ -17,13 +17,13 @@ namespace WeatherStation.Server
 
         Task<Thermometer> AddThermometer(string openId, string sn, string name);
 
-        Task RemoveThermometer(string openId, int id);
+        Task RemoveThermometer(string openId, string sn);
 
         Task SaveThermometerStatus(Thermometer device);
 
         Task<IList<TemparetureHistoryData>> GetTemparetureHistory(string openId, int id, DateTime start, DateTime end);
 
-        Task<User> GetUser(string session);
+        Task<User> GetUserBySession(string session);
 
         Task<User> AddUser(User user);
 

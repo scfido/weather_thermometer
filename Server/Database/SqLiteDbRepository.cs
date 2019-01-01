@@ -39,7 +39,7 @@ namespace WeatherStation.Server
             {
                 cnn.Open();
                 var result = await cnn.QueryAsync<Thermometer>(
-                    @"SELECT Id, SSID, Name, WiFiStrength, Sn, Key, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
+                    @"SELECT Id, SSID, Name, WiFiStrength, Sn, Key, Temperature, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
                     FROM Thermometer
                     WHERE OpenId = @openId
                     ", new { openId });
@@ -54,7 +54,7 @@ namespace WeatherStation.Server
             {
                 cnn.Open();
                 var result = await cnn.QueryAsync<Thermometer>(
-                    @"SELECT Id, SSID, Name, WiFiStrength, Sn, Key, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
+                    @"SELECT Id, SSID, Name, WiFiStrength, Sn, Key, Temperature, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
                     FROM Thermometer
                     WHERE
                         OpenId = @openId AND Id = @id"
@@ -70,7 +70,7 @@ namespace WeatherStation.Server
             {
                 cnn.Open();
                 var result = await cnn.QueryAsync<Thermometer>(
-                    @"SELECT Id, SSID, Name, WiFiStrength, Sn, Key, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
+                    @"SELECT Id, SSID, Name, WiFiStrength, Sn, Key, Temperature, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
                     FROM Thermometer
                     WHERE
                         Sn = @sn"
@@ -95,10 +95,10 @@ namespace WeatherStation.Server
                          OpenID = @openId AND
                          Id = @id;
 
-                    SELECT Id, Name, SSID, WiFiStrength, Sn, Key, Temp, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
+                    SELECT Id, Name, SSID, WiFiStrength, Sn, Key, Temperature, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
                     FROM Thermometer
                     WHERE
-                        OpenId = @openId AND Id = @id"
+                        OpenId = @OpenId AND Id = @id"
                     , new { openId, id, name });
                 return result.FirstOrDefault();
             }
@@ -114,7 +114,7 @@ namespace WeatherStation.Server
                     @"INSERT INTO Thermometer 
                         (Sn, OpenId, Name) 
                     VALUES 
-                        (  @Sn, @OpenId ,@name);
+                        (  @Sn, @OpenId ,@Name);
                     select last_insert_rowid()", device))
                     .First();
             }
@@ -122,15 +122,15 @@ namespace WeatherStation.Server
             return device;
         }
 
-        public async Task RemoveThermometer(string openId, int id)
+        public async Task RemoveThermometer(string openId, string sn)
         {
             using (var cnn = SimpleDbConnection())
             {
                 cnn.Open();
                 var trans = cnn.BeginTransaction();
-                int rows = await cnn.ExecuteAsync(@"DELETE FROM Thermometer WHERE OpenID=@openId AND ID=@id", new { openId, id });
+                int rows = await cnn.ExecuteAsync(@"DELETE FROM Thermometer WHERE OpenId=@openId AND Sn=@sn", new { openId, sn });
                 if (rows > 0)
-                    await cnn.ExecuteAsync(@"DELETE FROM TemperatureHistory WHERE ThermometerID=@id", new { openId, id });
+                    await cnn.ExecuteAsync(@"DELETE FROM TemperatureHistory WHERE Sn=@sn", new { openId, sn });
                 trans.Commit();
             }
         }
@@ -157,26 +157,28 @@ namespace WeatherStation.Server
 
                 //更新设备状态
                 await cnn.ExecuteAsync(
-                    @"UPDATE Thermometer 
-                    SET 
-                        WiFiStrength = @WiFiStrength, 
-                        SSID=@SSID, 
-                        Temp=@Temp,
-                        Power=@Power,
-                        Charge=@Charge,
-                        Battery=@Battery,
-                        IPAddress=@IPAddress 
-                    WHERE
-                         OpenID=@openId AND
-                        Sn=@Sn;"
-                    , device);
+                    @"
+                        UPDATE Thermometer 
+                        SET 
+                            WiFiStrength = @WiFiStrength, 
+                            SSID=@SSID, 
+                            Firmware=@Firmware,
+                            Temperature=@Temperature,
+                            Power=@Power,
+                            Charge=@Charge,
+                            Battery=@Battery,
+                            IPAddress=@IPAddress 
+                        WHERE
+                            OpenID=@OpenId AND
+                            Sn=@Sn;"
+                , device);
 
                 //添加温度历史
                 await cnn.ExecuteAsync(
                     @"INSERT INTO TemperatureHistory 
-                        (ThermometerID, Sn, Key, Temp, Battery, IPAddress) 
+                        (Sn, Temperature, Battery, IPAddress) 
                     VALUES 
-                        (@ID, @Sn, @Key, @Temp, @Battery, @IPAddress);"
+                        ( @Sn, @Temperature, @Battery, @IPAddress);"
                     , device);
 
                 trans.Commit();
@@ -195,7 +197,7 @@ namespace WeatherStation.Server
             {
                 cnn.Open();
                 var result = await cnn.QueryAsync<TemparetureHistoryData>(
-                    @"SELECT Time, WiFiStrength, Temp, Battery
+                    @"SELECT Time, WiFiStrength, Temperature, Battery
                     FROM TemperatureHistory
                     WHERE
                         OpenId = @openId AND
@@ -208,7 +210,7 @@ namespace WeatherStation.Server
             }
         }
 
-        public async Task<User> GetUser(string openId)
+        public async Task<User> GetUserBySession(string session)
         {
             using (var cnn = SimpleDbConnection())
             {
@@ -216,8 +218,8 @@ namespace WeatherStation.Server
                 var result = await cnn.QueryAsync<User>(
                     @"SELECT *
                     FROM User
-                    WHERE OpenId = @openId
-                    ", new { openId });
+                    WHERE Session = @session
+                    ", new { session });
 
                 return result.FirstOrDefault();
             }
@@ -289,10 +291,10 @@ namespace WeatherStation.Server
 	                    ID integer PRIMARY KEY AUTOINCREMENT,
 	                    SSID varchar ( 100 ),
 	                    WiFiStrength INTEGER,
-	                    Sn varchar ( 100 ) NOT NULL,
-	                    Key varchar ( 100 ) NOT NULL,
+	                    Sn varchar ( 20 ) NOT NULL,
+	                    Key varchar ( 100 ) ,
 	                    Name varchar ( 100 ) NOT NULL,
-	                    Temp REAL,
+	                    Temperature REAL,
 	                    Power INTEGER,
 	                    Charge INTEGER,
 	                    Battery REAL,
@@ -306,8 +308,8 @@ namespace WeatherStation.Server
 
                     CREATE TABLE TemperatureHistory (
 	                    ID integer PRIMARY KEY AUTOINCREMENT,
-                        ThermometerID integer,
-	                    Temp REAL,
+                        Sn varchar ( 20 ) NOT NULL,
+	                    Temperature REAL,
 	                    Battery REAL,
 	                    IPAddress varchar ( 20 ),
 	                    CreatedDate datetime DEFAULT (
