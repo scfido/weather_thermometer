@@ -32,6 +32,7 @@ namespace WeatherStation.Server
             return WebHost.CreateDefaultBuilder(args)
                 .UseKestrel(options =>
                 {
+                    options.Listen(IPAddress.Any, 80);
                     options.Listen(IPAddress.Any, 443, listOptions =>
                     {
                         listOptions.UseHttps(certPath, config["HttpsCertPassword"]);

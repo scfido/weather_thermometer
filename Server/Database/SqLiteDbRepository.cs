@@ -167,7 +167,8 @@ namespace WeatherStation.Server
                             Power=@Power,
                             Charge=@Charge,
                             Battery=@Battery,
-                            IPAddress=@IPAddress 
+                            IPAddress=@IPAddress,
+                            LastUpdate=@LastUpdate
                         WHERE
                             OpenID=@OpenId AND
                             Sn=@Sn;"
