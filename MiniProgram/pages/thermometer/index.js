@@ -67,26 +67,24 @@ Page({
     // 所以此处加入 callback 以防止这种情况
     app.loginCallback = res => {
       if (res.statusCode === 200) {
+        wx.request({
+          url: `${app.globalData.host}/api/thermometer/${getApp().globalData.session}`,
+          success: res => {
+            if (res.statusCode !== 200)
+              return;
 
+            let data = res.data;
+            data.forEach(d => {
+              d.lastUpdate = format(d.lastUpdate, "zh_CN")
+              d.batteryPercent = d.battery - 3.60 / (4.20 - 3.60);
+            })
+            this.setData({
+              thermometers: res.data,
+              indicatorDots: res.data.length > 1
+            })
+          }
+        })
       }
     }
-
-    wx.request({
-      url: `${app.globalData.host}/api/thermometer/${getApp().globalData.session}`,
-      success: res => {
-        if (res.statusCode !== 200)
-          return;
-
-        let data = res.data;
-        data.forEach(d => {
-          d.lastUpdate = format(d.lastUpdate, "zh_CN")
-          d.batteryPercent = d.battery - 3.60 / (4.20 - 3.60);
-        })
-        this.setData({
-          thermometers: res.data,
-          indicatorDots: res.data.length > 1
-        })
-      }
-    })
   }
 })
