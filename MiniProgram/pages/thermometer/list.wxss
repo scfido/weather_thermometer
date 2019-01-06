@@ -1,0 +1,5 @@
+/* pages/thermometer/list.wxss */
+.btnCard{
+  margin: 1.5em;
+
+}

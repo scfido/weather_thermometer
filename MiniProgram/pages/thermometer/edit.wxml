@@ -1,0 +1,21 @@
+<view class='formCard'>
+  <form bindsubmit="formSubmit">
+    <view class="section">
+      <view class="section__title">序列号</view>
+      <input name="sn" placeholder="温度计序列号" focus="true" confirm-type="next" value="{{sn}}" />
+    </view>
+    <view class="section">
+      <view class="section__title">名称</view>
+      <input name="name" placeholder="方便你记忆的名称" confirm-type="done" value="{{name}}"/>
+    </view>
+    <view class='btnCard'>
+      <button class='btnStyle' hover-class="navigator-hover" form-type="submit">
+        保存
+      </button>
+      <button class='btnDelete' hover-class="navigator-hover" wx:if="{{method==='PUT'}}" bindtap='delete'>
+        删除
+      </button>
+
+    </view>
+  </form>
+</view>

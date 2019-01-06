@@ -1,0 +1,25 @@
+/* pages/frist/frist.wxss */
+.fristCard{
+  display: block;
+  height: 100%;
+}
+.fristTable{
+  display: table;
+  height: inherit;
+  text-align: center;
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box
+}
+.fristCell{
+  display: table-cell;
+  height:initial;
+  vertical-align: middle
+}
+.smileIocn{
+  width: 48px;
+  height: 48px;
+}
+.btnCard{
+  margin: 2.8em 0;
+}

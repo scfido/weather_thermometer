@@ -1,0 +1,287 @@
+/* pages/hot/hot.wxss */
+
+.container{
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.topCard{
+  position: relative;
+  height: 65px;
+  padding-top: 16px;
+  display: block;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.topExpression{
+  position: absolute;
+  z-index: 1;
+  top: 5px;
+  left: 16px;
+  width: 45px;
+  height: 41px;
+}
+
+.settingIcon{
+  position: absolute;
+  z-index: 3;
+  right: 12px;
+  top: 12px;
+  display: block;
+}
+.settingIcon image{
+  border-radius: 100%;
+  background: rgba(255,255,255,0);
+  padding: 6px;
+  width: 24px;
+  height: 24px
+}
+.settingIcon:active image{
+  background: rgba(0,0,0,0.35);
+  border-radius: 100%;
+}
+.settingIcon:focus{
+  background: rgba(0,0,0,0);
+  border-radius: 100%;
+}
+.settingIcon:active{
+  background: rgba(0,0,0,0);
+  border-radius: 100%;
+}
+.stepCard{
+  position:absolute;
+  bottom: 10px;
+  display: block;
+  width: 100%;
+  text-align: center
+}
+.stepCardSpan{
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 20px;
+  margin:0 6px;
+  background: rgba(255,255,255,0.15)
+}
+.stepCardSpanActive{
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 20px;
+  margin:0 6px;
+  background: rgba(255,255,255,1)
+}
+.timeCard{
+  position: absolute;
+  top: 85px;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: rgba(255,255,255,0.35);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.temperatureCard{
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 3.5em;
+  font-family:sans-serif;
+  margin-bottom:16px
+}
+.batteryCard{
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.batteryList{
+  display: inline-block;
+  margin: 0;
+  padding: 0
+}
+
+.batteryList li{
+  display:block;
+  width: 100px;
+  height: 80px;
+  float: left;
+  margin: 0 8px;
+  position: relative;
+}
+
+
+.batteryList li h3{
+  display: block;
+  text-align: center;
+  position: absolute;
+  bottom: 24px;
+  width: 100%;
+}
+.batteryList li label{
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.2;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.batteryIcon{
+  width: 32px;
+  height: 12px;
+  display: inline-block;
+  position: relative;
+  margin-top:6px;
+}
+.batteryIcon:before{
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: -2px;
+  right: -2px;
+  left: -2px;
+  bottom: -2px;
+  display:block;
+  border: 1px solid white;
+  border-radius: 2px;
+}
+.batteryIcon:after{
+  position: absolute;
+  display: block;
+  right: -4px;
+  content: '';
+  width: 2px;
+  height: 4px;
+  background: white;
+  border-radius: 0 2px 2px 0;
+  top: 4px;
+  z-index: 2;
+}
+.batteryProgressBar{
+  position: absolute;
+  display: block;
+  background: white;
+  top:0;
+  bottom: 0;
+  left:0;
+  right:0;
+  z-index: 3;
+  border-radius: 1px;
+}
+.thunderboltFill{
+  position: absolute;
+  z-index: 4;
+  left: 8px;
+  width: 14px;
+  height: 16px;
+  top:-2px;
+}
+
+
+.wifiCard{
+  display: inline-block;
+  width: 40px;
+  height: 28px;
+  position: relative;
+  margin: 0 auto;
+}
+.wifiCircle{
+  position: absolute;
+  border-left: 2px solid rgb(55, 245, 55);
+  border-top: 2px solid transparent;
+  border-right: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+  border-radius:100px 0 0 0;
+  display: block;
+  bottom: 0;
+  transform: rotate(45deg);
+  background-color: transparent;
+}
+.one{
+  height:0;
+  width:0;
+  border-radius: 100%;
+  border: 2px solid rgb(55, 245, 55);
+  left: 17px;
+}
+.two{
+  height: 8px;
+  width: 8px;
+  left: 13px
+}
+.three{
+  height: 16px;
+  width: 16px;
+  left: 9px;
+}
+.four{
+  height: 24px;
+  width: 24px;
+  left: 5px
+}
+.grayBgOne{
+  border-color: rgba(255,255,255,0.35);
+}
+.grayBg{
+  border-left-color: rgba(255,255,255,0.35);
+}
+.chartBar{
+  border-top: 1px solid rgba(255,255,255,0.15);
+  position: absolute;
+  bottom:160px;
+  left: 0;
+  right: 0;
+  display: block;
+  text-align:center;
+  padding: 8px;
+
+}
+.chartBarList{
+  display:inline-block
+}
+.chartBarList li{
+  flex:1;
+  text-align: center;
+  margin: 0 8px;
+}
+.chartLabel{
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  font-size: 14px;
+  border-radius: 100%;
+  border: 1px solid rgba(255,255,255,0);
+  opacity: 0.35
+}
+.chartLabel:active{
+  border: 1px solid rgba(255,255,255,0.65);
+  opacity: 1
+}
+.chartLabelActive{
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  font-size: 14px;
+  border-radius: 100%;
+  border: 1px solid rgba(255,255,255,1);
+  opacity: 1
+}
+
+.chartCard{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  color: white;
+  height: 160px;
+  margin:0 0.5em;
+}
+.canvas{
+  color: white;
+  width: 100%;
+  height: inherit;
+}

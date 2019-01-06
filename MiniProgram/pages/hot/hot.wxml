@@ -1,0 +1,54 @@
+<!--hot.wxml-->
+<template name="itemHot">
+<view class='container'>
+  <view class="topCard">
+    <image class='topExpression' src='../images/iconSmile@3x.png' /> 设备名称
+    <navigator class='settingIcon' url="../equipmentAdd/equipmentAdd?title=equipmentAdd">
+          <image src='../images/setting@3x.png' />
+        </navigator>
+    
+  </view>
+  <view class='timeCard'>2018/12/23 12:23 </view>
+  <view class='temperatureCard'>27°C</view>
+  <view class='batteryCard'>
+    <ul class='batteryList'>
+      <li>
+        <div class='batteryIcon'>
+          <image class="thunderboltFill" src='../images/thunderbolt-fill@3x.png'></image>
+          <span class="batteryProgressBar" style="width:70%" />
+        </div>
+        <h3>70%</h3>
+        <label>电池</label>
+      </li>
+      <li>
+      <div class="wifiCard">
+      <span class="wifiCircle one"/>
+      <span class="wifiCircle two"/>
+      <span class="wifiCircle three"/>
+      <span class="wifiCircle four grayBg"/>
+      <!--
+      此处为信号弱时的样式效果
+      <span class="wifiCircle one grayBgOne"/>
+      <span class="wifiCircle two grayBg"/>
+      <span class="wifiCircle three grayBg"/>
+      <span class="wifiCircle four grayBg"/>-->
+      </div>
+        <h3>强</h3>
+        <label>信号</label>
+      </li>
+    </ul>
+  </view>
+  <import src ="./default.wxml"/>
+<template is="itemIndex"/>
+ <view class='chartBar'>
+ <ul class="chartBarList">
+ <li><span class="chartLabelActive">日</span></li>
+ <li><span class="chartLabel">月</span></li>
+ <li><span class="chartLabel">年</span></li>
+ </ul>
+ </view>
+ <view class='chartCard'>
+ <canvas canvas-id="lineCanvas" class="canvas"></canvas>
+ </view>
+</view>
+</template>

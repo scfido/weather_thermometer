@@ -1,0 +1,11 @@
+<view>
+  <navigator  wx:for="{{thermometers}}" class='listCard' url="./edit?title=编辑&sn={{item.sn}}&name={{item.name}}&id={{item.id}}">
+    <text class='list-title'>{{item.name}}</text>
+    <text class='list-sup'>{{item.sn}}</text>
+  </navigator>
+  <view class='btnCard'>
+    <navigator class='btnStyle' url="./edit?title=添加">
+      添加温度计
+    </navigator>
+  </view>
+</view>

@@ -1,0 +1,15 @@
+<!--pages/frist/frist.wxml-->
+<view class="fristCard">
+  <view class="fristTable">
+    <view class='fristCell'>
+      <image src='../images/smile@3x.png' class='smileIocn'></image>
+      <view>初次使用要先添加设备哦</view>
+      <view class='btnCard'>
+        <navigator class='btnStyle' url="../equipmentAdd/equipmentAdd?title=equipmentAdd">
+          添加设备
+        </navigator>
+      </view>
+      <image src="../images/picture@3x.png" />
+    </view>
+  </view>
+</view>

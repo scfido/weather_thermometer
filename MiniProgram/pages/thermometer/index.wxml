@@ -1,0 +1,46 @@
+<!--index.wxml-->
+<view>
+  <!--表情-->
+  <image class='topExpression' src='../images/iconSmile@3x.png' />
+  <text class="name">设备名称</text>
+  <!--设置按钮-->
+  <navigator class='settingIcon' url="/pages/thermometer/list?title=我的温度计">
+    <image src='../images/setting@3x.png' />
+  </navigator>
+</view>
+
+<view class="swiperPage">
+  <swiper class='swiperCard' indicator-color="rgba(255,255,255,0.2)" indicator-active-color="rgba(255,255,255,0.8)" indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" circular="{{circular}}" vertical="{{vertical}}" interval="{{interval}}" duration="{{duration}}"
+    previous-margin="{{previousMargin}}px" next-margin="{{nextMargin}}px">
+    <block wx:for="{{thermometers}}" wx:key="id">
+      <swiper-item >
+        <view class="swiper-item bgPrimary">
+
+          <!-- 主界面 -->
+          <view class='timeCard'>{{item.lastUpdate}}</view>
+          <view class='temperatureCard'>{{item.temperature}}°C</view>
+          <view class='batteryCard'>
+            <ul class='batteryList'>
+              <li>
+                <div class='batteryIcon'>
+                  <image class="thunderboltFill" src='../images/thunderbolt-fill@3x.png'></image>
+                  <span class="batteryProgressBar" style="width:{{item.batteryPercent}}%" />
+                </div>
+                <h3>{{item.battery}}V</h3>
+              </li>
+              <li>
+                <div class="wifiCard">
+                  <span class="wifiCircle one" />
+                  <span class="wifiCircle two" />
+                  <span class="wifiCircle three" />
+                  <span class="wifiCircle four" />
+                </div>
+                <h3>{{item.wiFiStrength}}</h3>
+              </li>
+            </ul>
+          </view>
+        </view>
+      </swiper-item>
+    </block>
+  </swiper>
+</view>

@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/thermometer/index",
+    "pages/thermometer/list",
+    "pages/thermometer/edit",
+    "pages/nav/navPage",
+    "pages/hot/hot",
+    "pages/charts/charts",
+    "pages/frist/frist",
+    "pages/logs/logs"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black"
+  }
+}

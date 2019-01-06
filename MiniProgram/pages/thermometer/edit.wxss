@@ -1,0 +1,18 @@
+/* pages/equipmentAdd/equipmentAdd.wxss */
+.btnCard{
+  margin: 1.5rpx;
+
+}
+
+.btnDelete {
+  text-align: center;
+  background-color: #fc270b;
+  border: 1rpx solid rgba(255, 255, 255, 0.25);
+  color: white;
+  letter-spacing: 2rpx;
+  border-radius: 60rpx;
+  height: 120rpx;
+  line-height: 120rpx;
+  box-shadow: 0 0 4rpx rgb(143, 17, 17);
+  margin-top: 20rpx;
+}

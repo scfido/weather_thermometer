@@ -1,0 +1,4 @@
+/* pages/nav/navPage.wxss */
+.marginBottom{
+  margin:24px 16px;
+}

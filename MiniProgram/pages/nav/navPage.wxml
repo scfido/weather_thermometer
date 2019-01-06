@@ -1,0 +1,21 @@
+<view>
+<view class="marginBottom">我是界面向导，你要去哪里？</view>
+<navigator class='listCard' url="../frist/frist?title=frist" >
+  <view class='list-title'>第一次登录</view>
+</navigator>
+
+
+<navigator class='listCard' url="../index/index?title=index" >
+  <view class='list-title'>主界面</view>
+</navigator>
+
+
+<navigator class='listCard' url="../thermometer/edit?title=equipmentAdd" >
+  <view class='list-title'>添加设备</view>
+</navigator>
+
+
+<navigator class='listCard' url="../thermometer/list?title=equipmentSave" >
+  <view class='list-title'>设备列表</view>
+</navigator>
+</view>
