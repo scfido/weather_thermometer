@@ -1,4 +1,6 @@
 FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
