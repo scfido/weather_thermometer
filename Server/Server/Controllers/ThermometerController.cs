@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace WeatherStation.Server.Controllers
@@ -14,11 +15,13 @@ namespace WeatherStation.Server.Controllers
     {
         readonly IDbRepository db;
         readonly ILogger<ThermometerController> logger;
+        readonly IConfiguration config;
 
-        public ThermometerController(IDbRepository db, ILogger<ThermometerController> logger)
+        public ThermometerController(IDbRepository db, ILogger<ThermometerController> logger, IConfiguration config)
         {
             this.db = db;
             this.logger = logger;
+            this.config = config;
         }
 
         // 获取指定人员的温度计信息
@@ -78,7 +81,7 @@ namespace WeatherStation.Server.Controllers
 
             await db.SaveThermometerStatus(device);
             //返回值“屏幕上显示的数字,下次唤醒设备间隔的秒数”
-            return $"{temp.ToString("00.00")},3600";
+            return $"{temp.ToString("00.00")},{config.GetValue<string>("Thermometer:SleepDuration")}";
         }
 
         // 修改指定人员的温度计名称

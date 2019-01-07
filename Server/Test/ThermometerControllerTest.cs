@@ -52,9 +52,9 @@ namespace WeatherStation.Server.Testing
         public async Task UploadTest()
         {
             var url = "api/thermometer/upload?ver=1.0&sn=123456AB&ssid=wifi&key=34235&batt=3.6&rssi=5334&power=3&temp=11.5&charge=0";
-            var actual = await client.GetAsync(url);
+            var actual = await client.GetStringAsync(url);
 
-            Assert.Equal(HttpStatusCode.OK, actual.StatusCode);
+            Assert.Equal("11.50,360", actual);
         }
 
         [Fact]
