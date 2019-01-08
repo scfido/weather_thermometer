@@ -2,7 +2,7 @@
 <view>
   <!--表情-->
   <image class='topExpression' src='../images/iconSmile@3x.png' />
-  <text class="name">设备名称</text>
+  <text class="name">{{name}}</text>
   <!--设置按钮-->
   <navigator class='settingIcon' url="/pages/thermometer/list?title=我的温度计">
     <image src='../images/setting@3x.png' />
@@ -10,10 +10,16 @@
 </view>
 
 <view class="swiperPage">
-  <swiper class='swiperCard' indicator-color="rgba(255,255,255,0.2)" indicator-active-color="rgba(255,255,255,0.8)" indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" circular="{{circular}}" vertical="{{vertical}}" interval="{{interval}}" duration="{{duration}}"
-    previous-margin="{{previousMargin}}px" next-margin="{{nextMargin}}px">
-    <block wx:for="{{thermometers}}" wx:key="id">
-      <swiper-item >
+  <swiper 
+    class='swiperCard' 
+    indicator-color="rgba(255,255,255,0.2)" 
+    indicator-active-color="rgba(255,255,255,0.8)" 
+    indicator-dots="{{indicatorDots}}" 
+    interval="{{interval}}"
+    bindchange="swiperChange"
+  >
+    <block wx:for="{{thermometers}}" wx:key="*this">
+      <swiper-item item-id="{{item.id}}" >
         <view class="swiper-item bgPrimary">
 
           <!-- 主界面 -->
@@ -23,19 +29,19 @@
             <ul class='batteryList'>
               <li>
                 <div class='batteryIcon'>
-                  <image class="thunderboltFill" src='../images/thunderbolt-fill@3x.png'></image>
+                  <image wx:if="{{item.power}}" class="thunderboltFill" src='../images/thunderbolt-fill@3x.png'></image>
                   <span class="batteryProgressBar" style="width:{{item.batteryPercent}}%" />
                 </div>
                 <h3>{{item.battery}}V</h3>
               </li>
               <li>
                 <div class="wifiCard">
-                  <span class="wifiCircle one" />
-                  <span class="wifiCircle two" />
-                  <span class="wifiCircle three" />
-                  <span class="wifiCircle four" />
+                  <span class="wifiCircle one {{item.wiFiStrength > -90 ? '' : 'grayBgOne'}}" />
+                  <span class="wifiCircle two {{item.wiFiStrength > -80 ? '' : 'grayBg'}}" />
+                  <span class="wifiCircle three {{item.wiFiStrength > -70 ? '' : 'grayBg'}}" />
+                  <span class="wifiCircle four {{item.wiFiStrength > -60 ? '' : 'grayBg'}}" />
                 </div>
-                <h3>{{item.wiFiStrength}}</h3>
+                <h3>WiFi</h3>
               </li>
             </ul>
           </view>

@@ -11,8 +11,9 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle": "black"
+    "navigationBarBackgroundColor": "#3023ae",
+    "backgroundColorTop": "#3023ae",
+    "navigationBarTitleText": "惠多气象",
+    "navigationBarTextStyle": "white"
   }
 }

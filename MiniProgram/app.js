@@ -81,6 +81,6 @@ App({
   globalData: {
     userInfo: null,
     session: null,
-    host: "https://temp.fcca.top"
+    host: "https://ws.fcca.top"
   }
 })

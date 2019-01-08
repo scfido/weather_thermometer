@@ -1,4 +1,5 @@
 // pages/thermometer/edit.js
+var app = getApp();
 
 Page({
 
@@ -13,7 +14,6 @@ Page({
   },
 
   delete() {
-    let app = getApp();
     let url = `${app.globalData.host}/api/thermometer/${getApp().globalData.session}/${this.data.sn}`;
     wx.showLoading({
       title: '删除中',
@@ -43,7 +43,6 @@ Page({
   formSubmit(e) {
     let url;
     let method = this.data.method;
-    let app = getApp();
 
     if (method === "PUT") {
       url = `${app.globalData.host}/api/thermometer/${getApp().globalData.session}/${this.data.id}`;

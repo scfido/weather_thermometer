@@ -1,7 +1,7 @@
 /**app.wxss**/
 
 page {
-  background: linear-gradient(rgba(48, 35, 174, 1), rgba(200, 109, 215, 1));
+  background: linear-gradient(#3023ae, rgba(200, 109, 215, 1));
   color: white;
   height: 100%;
   background-attachment: fixed;

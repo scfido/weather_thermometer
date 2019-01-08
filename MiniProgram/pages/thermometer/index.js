@@ -6,20 +6,58 @@ import {
 
 var app = getApp();
 var lineChart = null;
+let currentIndex = 0;
 
 Page({
   data: {
+    name: "",
     thermometers: [],
-
-    background: ['demo-text-1', 'demo-text-2', 'demo-text-3'],
     indicatorDots: false,
-    vertical: false,
-    autoplay: false,
-    circular: false,
     interval: 2000,
-    duration: 500,
-    previousMargin: 0,
-    nextMargin: 0,
+  },
+
+  loadThermometers: function(done) {
+    wx.request({
+      url: `${app.globalData.host}/api/thermometer/${getApp().globalData.session}`,
+      success: res => {
+        if (res.statusCode !== 200)
+          return;
+
+        let data = res.data;
+        data.forEach(d => {
+          d.lastUpdate = format(d.lastUpdate, "zh_CN")
+          d.batteryPercent = (d.battery - 3.60) / (4.15 - 3.60) * 100;
+          if (d.batteryPercent > 100)
+            d.batteryPercent = 100;
+        })
+        this.setData({
+          thermometers: res.data,
+          indicatorDots: res.data.length > 1
+        })
+
+        this.updateName();
+      },
+      complete: () => {
+        if (done)
+          done();
+      }
+    })
+  },
+
+  updateName: function() {
+    let name = "";
+    if (currentIndex < this.data.thermometers.length)
+      name = this.data.thermometers[currentIndex].name;
+
+    this.setData({
+      name
+    });
+
+  },
+
+  swiperChange: function(e) {
+    currentIndex = e.detail.current;
+    this.updateName();
   },
 
   //charts
@@ -67,24 +105,25 @@ Page({
     // 所以此处加入 callback 以防止这种情况
     app.loginCallback = res => {
       if (res.statusCode === 200) {
-        wx.request({
-          url: `${app.globalData.host}/api/thermometer/${getApp().globalData.session}`,
-          success: res => {
-            if (res.statusCode !== 200)
-              return;
-
-            let data = res.data;
-            data.forEach(d => {
-              d.lastUpdate = format(d.lastUpdate, "zh_CN")
-              d.batteryPercent = d.battery - 3.60 / (4.20 - 3.60);
-            })
-            this.setData({
-              thermometers: res.data,
-              indicatorDots: res.data.length > 1
-            })
-          }
-        })
+        this.loadThermometers();
       }
     }
-  }
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function() {
+    this.loadThermometers();
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function() {
+    this.loadThermometers(() => {
+      wx.stopPullDownRefresh();
+    });
+  },
+
 })

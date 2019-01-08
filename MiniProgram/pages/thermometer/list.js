@@ -1,4 +1,6 @@
 // pages/thermometer/index.js
+var app = getApp();
+
 Page({
 
   /**
@@ -9,8 +11,7 @@ Page({
 
   },
 
-  loadThermometers: function() {
-    let app = getApp();
+  loadThermometers: function(done) {
     wx.request({
       url: `${app.globalData.host}/api/thermometer/${getApp().globalData.session}`,
       success: res => {
@@ -18,6 +19,10 @@ Page({
           thermometers: res.data
         })
         console.log(res.data);
+      },
+      complete: () => {
+        if (done)
+          done();
       }
     })
   },
@@ -26,7 +31,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.loadThermometers();
   },
 
   /**
@@ -40,7 +44,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-
+    this.loadThermometers();
   },
 
   /**
@@ -61,7 +65,9 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
-    this.loadThermometers();
+    this.loadThermometers(() => {
+      wx.stopPullDownRefresh();
+    });
   },
 
   /**
