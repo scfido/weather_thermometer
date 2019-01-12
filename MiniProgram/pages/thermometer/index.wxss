@@ -160,58 +160,63 @@
 }
 
 .batteryIcon {
-  width: 32px;
-  height: 12px;
+  width: 64rpx;
+  height: 24rpx;
   display: inline-block;
   position: relative;
-  margin-top: 6px;
+  margin-top: 6rpx;
 }
 
 .batteryIcon:before {
   content: '';
   position: absolute;
   z-index: 1;
-  top: -2px;
-  right: -2px;
-  left: -2px;
-  bottom: -2px;
+  top: -2rpx;
+  right: -2rpx;
+  left: -2rpx;
+  bottom: -2rpx;
   display: block;
-  border: 1px solid white;
-  border-radius: 2px;
+  border: 1rpx solid white;
+  border-radius: 2rpx;
 }
 
 .batteryIcon:after {
   position: absolute;
   display: block;
-  right: -4px;
+  right: -6rpx;
   content: '';
-  width: 2px;
-  height: 4px;
+  width: 4rpx;
+  height: 16rpx;
   background: white;
-  border-radius: 0 2px 2px 0;
-  top: 4px;
+  border-radius: 0 2rpx 2rpx 0;
+  top: 4rpx;
   z-index: 2;
 }
 
 .batteryProgressBar {
   position: absolute;
   display: block;
-  background: white;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  background: rgb(34, 247, 6);
+  top: 1rpx;
+  bottom: 1rpx;
+  left: 1rpx;
+  right: 1rpx;
   z-index: 3;
-  border-radius: 1px;
+  border-radius: 1rpx;
 }
+
+
+.lowPower {
+  background: rgb(247, 6, 6);
+}
+
 
 .thunderboltFill {
   position: absolute;
   z-index: 4;
-  left: 8px;
-  width: 14px;
-  height: 16px;
-  top: -2px;
+  left: 16rpx;
+  width: 16rpx;
+  height: 24rpx;
 }
 
 .wifiCard {

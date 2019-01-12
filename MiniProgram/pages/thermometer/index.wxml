@@ -18,8 +18,8 @@
     interval="{{interval}}"
     bindchange="swiperChange"
   >
-    <block wx:for="{{thermometers}}" wx:key="*this">
-      <swiper-item item-id="{{item.id}}" >
+    <block wx:for="{{thermometers}}" wx:key="id">
+      <swiper-item>
         <view class="swiper-item bgPrimary">
 
           <!-- 主界面 -->
@@ -30,7 +30,7 @@
               <li>
                 <div class='batteryIcon'>
                   <image wx:if="{{item.power}}" class="thunderboltFill" src='../images/thunderbolt-fill@3x.png'></image>
-                  <span class="batteryProgressBar" style="width:{{item.batteryPercent}}%" />
+                  <span class="batteryProgressBar {{item.batteryPercent > 20 ? '' : 'lowPower'}}" style="width:{{item.batteryPercent}}%" />
                 </div>
                 <h3>{{item.battery}}V</h3>
               </li>

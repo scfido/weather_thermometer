@@ -12,6 +12,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#3023ae",
+    "backgroundCOlor":"#3023ae",
     "backgroundColorTop": "#3023ae",
     "navigationBarTitleText": "惠多气象",
     "navigationBarTextStyle": "white"
