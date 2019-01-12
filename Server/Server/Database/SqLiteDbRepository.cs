@@ -80,6 +80,24 @@ namespace WeatherStation.Server
             }
         }
 
+        public async Task<Thermometer> GetThermometer(string sn, string openId)
+        {
+            using (var cnn = SimpleDbConnection())
+            {
+                cnn.Open();
+                var result = await cnn.QueryAsync<Thermometer>(
+                    @"SELECT Id, SSID, Name, WiFiStrength, Sn, Key, Temperature, Power, Charge, Battery, LastUpdate, IPAddress, Firmware, OpenId
+                    FROM Thermometer
+                    WHERE
+                        Sn = @sn AND
+                        OpenId=@OpenId
+                    "
+                    , new { sn, openId });
+
+                return result.FirstOrDefault();
+            }
+
+        }
 
         public async Task<Thermometer> UpdateThermometer(string openId, int id, string name)
         {

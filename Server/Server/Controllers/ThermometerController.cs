@@ -50,7 +50,7 @@ namespace WeatherStation.Server.Controllers
                 return null;
             }
 
-            if (await db.GetThermometer(sn) == null)
+            if (await db.GetThermometer(sn, openId) == null)
                 return await db.AddThermometer(openId, sn, device.Name);
             else
                 return null;

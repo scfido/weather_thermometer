@@ -13,6 +13,9 @@ namespace WeatherStation.Server
 
         Task<Thermometer> GetThermometer(string sn);
 
+        Task<Thermometer> GetThermometer(string sn, string openId);
+
+
         Task<Thermometer> UpdateThermometer(string openId, int id, string name);
 
         Task<Thermometer> AddThermometer(string openId, string sn, string name);
