@@ -188,7 +188,6 @@ namespace WeatherStation.Server
                             IPAddress=@IPAddress,
                             LastUpdate=@LastUpdate
                         WHERE
-                            OpenID=@OpenId AND
                             Sn=@Sn;"
                 , device);
 
