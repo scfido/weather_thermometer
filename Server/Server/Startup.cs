@@ -29,7 +29,7 @@ namespace WeatherStation.Server
             //注入方式使用HttpClient，以便单元测试时替换可Mock的HttpClient。
             services.AddTransient<HttpClient>(s=>new HttpClient());
             services.AddTransient<IDbRepository, SqLiteDbRepository>();
-            services.AddMvc();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,8 +44,13 @@ namespace WeatherStation.Server
                 app.UseHsts();
             }
 
+            app.UseRouting();
+
             //app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

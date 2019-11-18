@@ -26,17 +26,17 @@ namespace WeatherStation.Server
                 .Build();
 
             var certPath = Path.Join(Directory.GetCurrentDirectory(), "https.pfx");
-            if (!File.Exists(certPath))
-                throw new FileNotFoundException($"没有找到https证书 {certPath}");
+            // if (!File.Exists(certPath))
+            //     throw new FileNotFoundException($"没有找到https证书 {certPath}");
 
             return WebHost.CreateDefaultBuilder(args)
                 .UseKestrel(options =>
                 {
                     options.Listen(IPAddress.Any, 80);
-                    options.Listen(IPAddress.Any, 443, listOptions =>
-                    {
-                        listOptions.UseHttps(certPath, config["HttpsCertPassword"]);
-                    });
+                    // options.Listen(IPAddress.Any, 443, listOptions =>
+                    // {
+                    //     listOptions.UseHttps(certPath, config["HttpsCertPassword"]);
+                    // });
                 })
                 .UseStartup<Startup>();
         }

@@ -332,3 +332,4 @@ ASALocalRun/
 *.sqlite
 /MiniProgram/miniprogram_npm
 /MiniProgram/node_modules
+.DS_Store
