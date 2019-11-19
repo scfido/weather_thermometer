@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using Xunit;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.AspNetCore;
@@ -20,7 +20,7 @@ namespace WeatherStation.Server.Testing
         {
             client = host.Create(mockHttp: mock =>
             {
-                //À¹½Ø·şÎñ¶ËÇëÇóÎ¢ĞÅapiµÄÇëÇó
+                //æ‹¦æˆªæœåŠ¡ç«¯è¯·æ±‚å¾®ä¿¡apiçš„è¯·æ±‚
                 mock.When("https://api.weixin.qq.com/sns/jscode2session").Respond("application/json", "{\"session_key\":\"Pw2PbhyOuHiuz7W4QfimKw== \",\"openid\":\"oxihd5c4EBDVEUNCLRJhvkS6l1Xg\"}");
             })
             .CreateClient();
