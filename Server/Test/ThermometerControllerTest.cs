@@ -14,19 +14,18 @@ using Newtonsoft.Json;
 
 namespace WeatherStation.Server.Testing
 {
-    public class ThermometerControllerTest : IClassFixture<TestWebHost>
+    public class ThermometerControllerTest : IClassFixture<TestWebApplicationFactory<Startup>>
     {
         private readonly HttpClient client;
         private readonly string session;
 
-        public ThermometerControllerTest(TestWebHost host)
+        public ThermometerControllerTest(TestWebApplicationFactory<Startup> factory)
         {
-            client = host.Create(mockHttp: mock =>
+            client = factory.Create(mock =>
             {
                 //拦截服务端请求微信api的请求
                 mock.When("https://api.weixin.qq.com/sns/jscode2session").Respond("application/json", "{\"session_key\":\"Pw2PbhyOuHiuz7W4QfimKw== \",\"openid\":\"oxihd5c4EBDVEUNCLRJhvkS6l1Xg\"}");
-            })
-            .CreateClient();
+            });
 
             var json = client.GetStringAsync("/api/account/login/abcdef").Result;
             var actual = new { Session = string.Empty };

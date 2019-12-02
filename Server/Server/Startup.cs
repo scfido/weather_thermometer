@@ -26,7 +26,7 @@ namespace WeatherStation.Server
         public void ConfigureServices(IServiceCollection services)
         {
             //注入方式使用HttpClient，以便单元测试时替换可Mock的HttpClient。
-            services.AddTransient<HttpClient>(s=>new HttpClient());
+            services.AddTransient(s=>new HttpClient());
             services.AddTransient<IDbRepository, SqLiteDbRepository>();
             services.AddControllers();
         }

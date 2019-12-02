@@ -26,39 +26,5 @@ namespace WeatherStation.Server
                     webBuilder.UseStartup<Startup>();
                 });
 
-        // public static void Main(string[] args)
-        // {
-        //     CreateWebHostBuilder(args).Build().Run();
-        // }
-
-        // public static IHostBuilder CreateWebHostBuilder(string[] args)
-        // {
-        //     return Host.CreateDefaultBuilder(args)
-        //         .ConfigureWebHostDefaults(webBuilder =>
-        //         {
-        //             webBuilder.UseStartup<Startup>();
-        //         });
-
-
-        // var config = new ConfigurationBuilder()
-        //     .AddEnvironmentVariables()
-        //     .AddUserSecrets<Program>()
-        //     .Build();
-
-        //var certPath = Path.Join(Directory.GetCurrentDirectory(), "https.pfx");
-        // if (!File.Exists(certPath))
-        //     throw new FileNotFoundException($"没有找到https证书 {certPath}");
-
-        // return WebHost.CreateDefaultBuilder(args)
-        //     .UseKestrel(options =>
-        //     {
-        //         options.Listen(IPAddress.Any, 80);
-        // options.Listen(IPAddress.Any, 443, listOptions =>
-        // {
-        //     listOptions.UseHttps(certPath, config["HttpsCertPassword"]);
-        // });
-        //     })
-        //     .UseStartup<Startup>();
-        //}
     }
 }

@@ -12,23 +12,24 @@ using RichardSzalay.MockHttp;
 
 namespace WeatherStation.Server.Testing
 {
-    public class AccountControllerTest : IClassFixture<TestWebHost>
+    public class AccountControllerTest : IClassFixture<TestWebApplicationFactory<Startup>>
     {
-        private readonly HttpClient client;
+        readonly TestWebApplicationFactory<Startup> factory;
 
-        public AccountControllerTest(TestWebHost host)
+        public AccountControllerTest(TestWebApplicationFactory<Startup> factory)
         {
-            client = host.Create(mockHttp: mock =>
-            {
-                //拦截服务端请求微信api的请求
-                mock.When("https://api.weixin.qq.com/sns/jscode2session").Respond("application/json", "{\"session_key\":\"Pw2PbhyOuHiuz7W4QfimKw== \",\"openid\":\"oxihd5c4EBDVEUNCLRJhvkS6l1Xg\"}");
-            })
-            .CreateClient();
+            this.factory = factory;
         }
 
         [Fact]
         public async Task LoginTest()
         {
+            var client = factory.Create(mock =>
+            {
+                //拦截服务端请求微信api的请求
+                mock.When("https://api.weixin.qq.com/sns/jscode2session").Respond("application/json", "{\"session_key\":\"Pw2PbhyOuHiuz7W4QfimKw== \",\"openid\":\"oxihd5c4EBDVEUNCLRJhvkS6l1Xg\"}");
+            });
+
             var actual = await client.GetStringAsync("/api/account/login/abcdef");
             Assert.NotEqual("", actual);
         }             
